@@ -84,10 +84,11 @@ const suggestions = document.getElementById("suggestions");
 
 let timeout = null;
 
+// prevent too many API calls
 input.addEventListener("input", () => {
   clearTimeout(timeout);
 
-  const query = input.value;
+  const query = input.value.trim();
 
   if (query.length < 3) {
     suggestions.innerHTML = "";
@@ -95,34 +96,50 @@ input.addEventListener("input", () => {
   }
 
   timeout = setTimeout(async () => {
-    const res = await fetch(
-      `https://nominatim.openstreetmap.org/search?format=json&q=${query}`
-    );
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`,
+        {
+          headers: {
+            "User-Agent": "StaySphereApp (learning project)"
+          }
+        }
+      );
 
-    const data = await res.json();
+      if (!res.ok) {
+        throw new Error("API rate limit hit");
+      }
 
-    suggestions.innerHTML = "";
+      const data = await res.json();
 
-    data.slice(0, 5).forEach(place => {
-      const li = document.createElement("li");
-      li.classList.add("list-group-item");
-      li.innerText = place.display_name;
+      suggestions.innerHTML = "";
 
-      li.addEventListener("click", () => {
-  input.value = place.display_name;
+      data.slice(0, 5).forEach(place => {
+        const li = document.createElement("li");
+        li.classList.add("list-group-item");
+        li.innerText = place.display_name;
 
-  // Auto fill country
-  const countryInput = document.querySelector('[name="listing[country]"]');
-  if (place.display_name.includes(",")) {
-    const parts = place.display_name.split(",");
-    countryInput.value = parts[parts.length - 1].trim();
-  }
+        li.addEventListener("click", () => {
+          input.value = place.display_name;
 
-  suggestions.innerHTML = "";
-});
+          // Auto fill country
+          const countryInput = document.querySelector('[name="listing[country]"]');
+          if (place.display_name.includes(",")) {
+            const parts = place.display_name.split(",");
+            countryInput.value = parts[parts.length - 1].trim();
+          }
 
-      suggestions.appendChild(li);
-    });
-  }, 400); // debounce
+          suggestions.innerHTML = "";
+        });
+
+        suggestions.appendChild(li);
+      });
+
+    } catch (err) {
+      console.log("Location API Error:", err);
+      suggestions.innerHTML = "";
+    }
+
+  }, 1000); // increased debounce to avoid 429
 });
 </script>
