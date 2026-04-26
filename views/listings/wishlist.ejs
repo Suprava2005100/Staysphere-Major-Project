@@ -2,19 +2,19 @@
 
 <h3 class="mt-3">My Wishlist ❤️</h3>
 
-<div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-1 mt-3">
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4 mt-1">
     <% for(let listing of listings) { %>
         <div class="col">
             <div class="card listing-card">
                 <a href="/listings/<%= listing._id %>">
-                    <img 
-                        src="<%= listing.image.url %>" 
-                        class="card-img-top" 
-                        style="height: 20rem"
+                    <img
+                        src="<%= listing.image.url %>"
+                        class="card-img-top wishlist-img"
+                        style="height: 18rem;"
                     />
                 </a>
                 <div class="card-body">
-                    <p>
+                    <p class="card-text">
                         <b><%= listing.title %></b><br>
                         ₹ <%= listing.price.toLocaleString("en-IN") %> / night
                     </p>
@@ -25,7 +25,14 @@
 </div>
 
 <% if (listings.length === 0) { %>
-  <p class="text-center mt-4 text-muted">
-    No items in wishlist yet
-  </p>
+  <p class="text-center mt-4 text-muted">No items in wishlist yet</p>
 <% } %>
+
+<style>
+@media (max-width: 576px) {
+    .wishlist-img {
+        height: 13rem !important;
+    }
+}
+</style>
+
