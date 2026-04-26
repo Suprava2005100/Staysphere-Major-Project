@@ -1,0 +1,105 @@
+<style>
+  .search-btn {
+    background-color: #fe424d;
+    color: #fff;
+    border-radius: 25px;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  .search-btn:hover {
+    background-color: #fe424d;
+    color: #fff;
+  }
+
+  .search-inp {
+    border-radius: 25px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
+
+  /*MOBILE FIX*/
+  @media (max-width: 768px) {
+
+    .navbar-collapse {
+      padding-bottom: 12px;   /* pushes content down */
+    }
+
+    .navbar form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .search-inp {
+      width: 100%;
+    }
+
+    .search-btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+  }
+</style>
+
+<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+  <div class="container-fluid">
+
+    <!-- LOGO -->
+    <a class="navbar-brand" href="/listings">
+      <i class="fa-solid fa-hotel"></i>
+    </a>
+
+    <!-- TOGGLE -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- CONTENT -->
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+
+      <!-- LEFT -->
+      <div class="navbar-nav">
+        <a class="nav-link" href="/listings">Explore</a>
+      </div>
+
+      <!-- 🔥 CENTER SEARCH (UNCHANGED DESKTOP) -->
+      <div class="navbar-nav ms-auto me-auto">
+        <form class="d-flex" role="search" action="/listings" method="GET">
+          <input 
+            class="form-control me-2 search-inp" 
+            type="search" 
+            name="q"
+            placeholder="Search destinations"
+            value="<%= typeof q !== 'undefined' ? q : '' %>"
+          />
+          <button class="btn search-btn" type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i> Search
+          </button>
+        </form>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="navbar-nav">
+        <a class="nav-link" href="/listings/new">Airbnb your home</a>
+
+        <% if(!currUser) { %>
+          <a class="nav-link" href="/signup"><b>Sign up</b></a>
+          <a class="nav-link" href="/login"><b>Log in</b></a>
+        <% } %> 
+
+        <% if (currUser) { %>
+          <a class="nav-link" href="/wishlist">Wishlist ❤️</a>
+          <a class="nav-link" href="/logout"><b>Logout</b></a>
+        <% } %>
+      </div>
+
+    </div>
+  </div>
+</nav>
