@@ -208,7 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 await fetch(`/wishlist/${listingId}`, { method: "POST" });
                 heart.classList.toggle("active");
-                heart.textContent = heart.classList.contains("active") ? "Γ¥ñ∩╕Å" : "ΓÖí";
+                heart.textContent = heart.classList.contains("active") ? "❤️" : "♡";
             } catch (err) {
                 console.log("Error:", err);
             }
